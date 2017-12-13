@@ -17,7 +17,8 @@ export class ManyeditComponent implements OnInit {
   timer: Observable<Number>;
 
   constructor(private editorService: EditorService) {
-    this.timer = Observable.timer(0, 300);
+    this.currText = '';
+    this.timer = Observable.timer(0, 2000);
   }
 
   ngOnInit() {
@@ -26,16 +27,19 @@ export class ManyeditComponent implements OnInit {
       const prevVal = el.value;
       const prevStart = el.selectionStart;
       const prevEnd = el.selectionEnd;
-      // console.log( x + ':' + prevVal + ':' + prevStart + ':' + prevEnd );
+      console.log( x + ':' + this.currText + ':' + prevVal + ':' + prevStart + ':' + prevEnd );
       const block = new EditBlock(this.currText, prevVal, prevStart, prevEnd);
       this.currText = prevVal;
       const updatedBlock = this.editorService.update(block);
       updatedBlock.subscribe(v => {
-        if (this.currText === v.original) {
+        const elinner = this.editorArea.nativeElement;
+        console.log(elinner.value + ' response: ' + v.edited + ':' + v.selectionStart + ':' + v.selectionEnd);
+        if (elinner.value === v.original) {
+          console.log('updated');
           this.currText = v.edited;
-          el.value = v.edited;
-          el.selectionStart = v.selectionStart;
-          el.selectionEnd = v.selectionEnd;
+          elinner.value = v.edited;
+          elinner.selectionStart = v.selectionStart;
+          elinner.selectionEnd = v.selectionEnd;
         } // Otherwise just ignore because the request is stale
       });
     });

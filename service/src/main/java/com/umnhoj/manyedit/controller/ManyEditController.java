@@ -29,7 +29,7 @@ public class ManyEditController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        final String edited = edit.getEdited().substring(0,1000); // after trimming
+        final String edited = edit.getEdited().substring(0,Math.min(edit.getEdited().length(),1000)); // after trimming
 
         // Compute patches and update
         if (!Objects.equals(edited, edit.getOriginal())) {
