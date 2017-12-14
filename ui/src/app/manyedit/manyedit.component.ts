@@ -27,15 +27,12 @@ export class ManyeditComponent implements OnInit {
       const prevVal = el.value;
       const prevStart = el.selectionStart;
       const prevEnd = el.selectionEnd;
-      console.log( x + ':' + this.currText + ':' + prevVal + ':' + prevStart + ':' + prevEnd );
       const block = new EditBlock(this.currText, prevVal, prevStart, prevEnd);
       this.currText = prevVal;
       const updatedBlock = this.editorService.update(block);
       updatedBlock.subscribe(v => {
         const elinner = this.editorArea.nativeElement;
-        console.log(elinner.value + ' response: ' + v.edited + ':' + v.selectionStart + ':' + v.selectionEnd);
         if (elinner.value === v.original) {
-          console.log('updated');
           this.currText = v.edited;
           elinner.value = v.edited;
           elinner.selectionStart = v.selectionStart;
